@@ -84,7 +84,7 @@ const Navbar = () => {
                 <Hero></Hero>
             </div>
             <div>
-                <Footer></Footer>
+                {/* <Footer></Footer> */}
             </div>
         </header>
     );

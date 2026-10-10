@@ -1,9 +1,16 @@
 import Image from "next/image";
+import Footer from "./components/Footer";
+import TodayPriceUp from "./components/TodayPriceUp";
+import TodayPriceDown from "./components/TodayPriceDown";
 
 export default function Home() {
   return (
     <div >
-      ‘নিকাব খুলতে বলিনি’, ঢাকা বিশ্ববিদ্যালয়ের সেই ঘটনায় শিক্ষকের ভিডিও বার্তা
+      <TodayPriceUp></TodayPriceUp>
+      <TodayPriceDown></TodayPriceDown>
+
+      <Footer></Footer>
+      
     </div>
   );
 }
