@@ -4,7 +4,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import NavLink from "./NavLink";
 import Marquee from "./Marquee";
-import Hero from "./Hero";
+// import Hero from "./Hero";
 import Footer from "./Footer";
 
 const CurrentDate = async () => {
@@ -80,9 +80,9 @@ const Navbar = () => {
             <div>
                 <Marquee></Marquee>
             </div>
-            <div>
+            {/* <div>
                 <Hero></Hero>
-            </div>
+            </div> */}
             <div>
                 {/* <Footer></Footer> */}
             </div>
