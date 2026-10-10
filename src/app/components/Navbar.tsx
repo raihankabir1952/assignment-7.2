@@ -4,6 +4,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import NavLink from "./NavLink";
 import Marquee from "./Marquee";
+import Hero from "./Hero";
 
 const CurrentDate = async () => {
     await connection();
@@ -77,6 +78,9 @@ const Navbar = () => {
             </div>
             <div>
                 <Marquee></Marquee>
+            </div>
+            <div>
+                <Hero></Hero>
             </div>
         </header>
     );
