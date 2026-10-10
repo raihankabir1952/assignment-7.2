@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Serif_Bengali } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Noto_Serif_Bengali({
     variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default function RootLayout({
         >
             <body className="flex min-h-full flex-col">
                 <Navbar />
+                <Toaster position="top-right" />
                 {children}
             </body>
         </html>
