@@ -1,7 +1,10 @@
 import React, { Suspense } from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { connection } from "next/server";
+import { headers } from "next/headers";
 import { cacheLife } from "next/cache";
+import { auth } from "@/lib/auth";
 
 const PRODUCTS_URL =
     "https://openapi.programming-hero.com/api/bazardor/products";
@@ -77,7 +80,18 @@ async function getProducts(): Promise<Product[]> {
 }
 
 const ProductContent = async ({ params }: PageProps) => {
+    await connection(); // সেশন পড়ার আগে অংশটাকে dynamic চিহ্নিত করে
+
     const { id } = await params;
+
+    // আসল সেশন যাচাই (শুধু কুকি আছে কি না নয়)
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
+    if (!session) {
+        redirect(`/signin?callbackUrl=${encodeURIComponent(`/products/${id}`)}`);
+    }
 
     const data = await getProducts();
 
