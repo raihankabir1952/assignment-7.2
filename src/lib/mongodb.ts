@@ -10,6 +10,10 @@
 
 // export const db = client.db("bazar-dor");
 
+
+
+
+
 //for deploy
 import { MongoClient } from "mongodb";
 import { attachDatabasePool } from "@vercel/functions";
@@ -34,4 +38,4 @@ if (!client) {
 }
 
 export { client };
-export const db = client.db(); // নির্দিষ্ট নাম লাগলে client.db("আপনার-ডাটাবেস")
+export const db = client.db("bazar-dor"); 

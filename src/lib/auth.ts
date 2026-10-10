@@ -32,18 +32,24 @@
 
 
 
+
+
+
+
+
+
+
+
 //for deploy
+
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
-import { client, db } from "@/lib/mongodb";
+import { db } from "@/lib/mongodb";
 
 export const auth = betterAuth({
-    // Vercel-এ আপনার সাইটের ঠিকানা (env থেকে), লোকালে http://localhost:3000
     baseURL: process.env.BETTER_AUTH_URL,
 
-    database: mongodbAdapter(db, {
-        client,
-    }),
+    database: mongodbAdapter(db),
 
     emailAndPassword: {
         enabled: true,
@@ -64,6 +70,6 @@ export const auth = betterAuth({
 
     trustedOrigins: [
         "http://localhost:3000",
-        "https://assignment-7-ivory-two.vercel.app", // deploy-এর জন্য
+        "https://assignment-7-ivory-two.vercel.app",
     ],
 });
