@@ -61,8 +61,8 @@ const pctBn = (n: number) =>
         maximumFractionDigits: 1,
     });
 
-// One cached fetch helper: retries a few times and reports the real status
-async function getJson<T>(url: string): Promise<T> {
+
+    async function getJson<T>(url: string): Promise<T> {
     "use cache";
     cacheLife("hours");
 
@@ -130,7 +130,7 @@ const CategoryContent = async ({ params, searchParams }: PageProps) => {
         );
     }
 
-    // Category comes from the categories API
+
     const category = categories.find((item) => item.slug === slug);
 
     if (!category) notFound();
@@ -177,7 +177,7 @@ const CategoryContent = async ({ params, searchParams }: PageProps) => {
                 <div className="mt-4 flex items-center justify-end gap-2 rounded-2xl border border-gray-200 bg-white/80 px-4 py-3">
                     <span className="text-xs text-gray-600">সাজান</span>
 
-                    {/* key={sortKey} remounts it, so the menu closes after a click */}
+                    {/* key={sortKey} দিলে অপশন ক্লিকের পর মেনু বন্ধ হয়ে যায় */}
                     <details key={sortKey} className="relative">
                         <summary className="flex cursor-pointer list-none items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-800 [&::-webkit-details-marker]:hidden">
                             {currentLabel}
@@ -241,7 +241,7 @@ const CategoryContent = async ({ params, searchParams }: PageProps) => {
                         return (
                             <Link
                                 key={product.id}
-                                href={`/product/${product.slug}`}
+                                href={`/products/${product.slug}`}
                                 className="rounded-2xl border border-gray-200 bg-white/80 p-4 transition hover:-translate-y-0.5 hover:shadow-sm"
                             >
                                 <div className="flex items-center gap-3">
