@@ -26,5 +26,6 @@ export const auth = betterAuth({
 
     trustedOrigins: [
         "http://localhost:3000",
+        "https://assignment-7-ivory-two.vercel.app", //new add for deploy
     ],
 });
