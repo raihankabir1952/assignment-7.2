@@ -1,14 +1,109 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 const ProfilePage = () => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [name, setName] = useState("Raihan Kabir");
-    const [newName, setNewName] = useState(name);
+    const router = useRouter();
 
+    const { data: session, isPending } = authClient.useSession();
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [newName, setNewName] = useState("");
+    const [isSaving, setIsSaving] = useState(false);
+    const [isSigningOut, setIsSigningOut] = useState(false);
+
+    const user = session?.user;
+    const name = user?.name || "";
+    const email = user?.email || "";
     const initial = name.trim().charAt(0).toUpperCase() || "U";
+
+    // Redirect unauthenticated users to sign in
+    useEffect(() => {
+        if (!isPending && !session) {
+            router.replace("/signin");
+        }
+    }, [isPending, session, router]);
+
+    // Update name in Better Auth / database
+    const handleUpdateName = async (
+        e: React.FormEvent<HTMLFormElement>
+    ) => {
+        e.preventDefault();
+
+        const trimmedName = newName.trim();
+
+        if (!trimmedName) {
+            toast.error("আপনার নাম লিখুন।");
+            return;
+        }
+
+        if (trimmedName === name) {
+            setIsEditing(false);
+            return;
+        }
+
+        try {
+            setIsSaving(true);
+
+            const result = await authClient.updateUser({
+                name: trimmedName,
+            });
+
+            if (result.error) {
+                toast.error(
+                    result.error.message || "নাম আপডেট করা যায়নি।"
+                );
+                return;
+            }
+
+            setIsEditing(false);
+            toast.success("নাম সফলভাবে আপডেট হয়েছে!");
+
+            // Refresh server components, including Navbar
+            router.refresh();
+        } catch {
+            toast.error("নাম আপডেট করা যায়নি। আবার চেষ্টা করুন।");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    // Sign out and return to homepage
+    const handleSignOut = async () => {
+        try {
+            setIsSigningOut(true);
+
+            const result = await authClient.signOut();
+
+            if (result.error) {
+                toast.error("সাইন আউট করা যায়নি। আবার চেষ্টা করুন।");
+                return;
+            }
+
+            toast.success("সফলভাবে সাইন আউট হয়েছে!");
+
+            router.replace("/");
+            router.refresh();
+        } catch {
+            toast.error("সাইন আউট করা যায়নি। আবার চেষ্টা করুন।");
+        } finally {
+            setIsSigningOut(false);
+        }
+    };
+
+    if (isPending || !session) {
+        return (
+            <main className="flex min-h-[70vh] items-center justify-center bg-[#f4f8f5]">
+                <p className="text-sm font-medium text-gray-600">
+                    প্রোফাইল লোড হচ্ছে...
+                </p>
+            </main>
+        );
+    }
 
     return (
         <main className="min-h-[70vh] w-full bg-[#f4f8f5] py-10">
@@ -34,21 +129,23 @@ const ProfilePage = () => {
                                 </h1>
 
                                 <p className="mt-1 break-all text-xs text-gray-500 sm:text-sm">
-                                    raihan@example.com
+                                    {email}
                                 </p>
                             </div>
                         </div>
 
                         <button
                             type="button"
-                            disabled
-                            title="Sign out functionality পরে যোগ করা হবে"
-                            className="flex shrink-0 items-center gap-2 rounded-xl border border-red-200 px-3 py-2 text-sm font-semibold text-red-600 opacity-60 sm:px-4"
+                            onClick={handleSignOut}
+                            disabled={isSigningOut}
+                            className="flex shrink-0 items-center gap-2 rounded-xl border border-red-200 px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60 sm:px-4"
                         >
                             <span aria-hidden="true">↪</span>
+
                             <span className="hidden sm:inline">
-                                সাইন আউট
+                                {isSigningOut ? "সাইন আউট হচ্ছে..." : "সাইন আউট"}
                             </span>
+
                             <span className="sm:hidden">বের হন</span>
                         </button>
                     </div>
@@ -79,16 +176,7 @@ const ProfilePage = () => {
                                 </div>
                             ) : (
                                 <form
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-
-                                        const trimmedName = newName.trim();
-
-                                        if (!trimmedName) return;
-
-                                        setName(trimmedName);
-                                        setIsEditing(false);
-                                    }}
+                                    onSubmit={handleUpdateName}
                                     className="space-y-3"
                                 >
                                     <input
@@ -99,26 +187,32 @@ const ProfilePage = () => {
                                         }
                                         maxLength={100}
                                         autoFocus
-                                        className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none focus:border-[#008a45] focus:ring-1 focus:ring-[#008a45]"
+                                        disabled={isSaving}
+                                        className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none focus:border-[#008a45] focus:ring-1 focus:ring-[#008a45] disabled:bg-gray-100"
                                         placeholder="আপনার নাম লিখুন"
                                     />
 
                                     <div className="flex flex-wrap gap-2">
                                         <button
                                             type="submit"
-                                            disabled={!newName.trim()}
+                                            disabled={
+                                                !newName.trim() || isSaving
+                                            }
                                             className="rounded-xl bg-[#008a45] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#007339] disabled:cursor-not-allowed disabled:opacity-60"
                                         >
-                                            Update Information
+                                            {isSaving
+                                                ? "আপডেট হচ্ছে..."
+                                                : "Update Information"}
                                         </button>
 
                                         <button
                                             type="button"
+                                            disabled={isSaving}
                                             onClick={() => {
                                                 setNewName(name);
                                                 setIsEditing(false);
                                             }}
-                                            className="rounded-xl border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                                            className="rounded-xl border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-60"
                                         >
                                             Cancel
                                         </button>
