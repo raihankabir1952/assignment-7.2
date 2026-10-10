@@ -21,7 +21,7 @@ const CurrentDate = async () => {
 };
 
 const AuthSection = async () => {
-    await connection(); // সেশন পড়ার আগে অংশটাকে dynamic চিহ্নিত করে
+    await connection();
 
     const session = await auth.api.getSession({
         headers: await headers(),
@@ -104,10 +104,12 @@ const Navbar = () => {
                 </div>
             </div>
 
+
             {/* Category Navigation */}
-            <div className="mx-auto hidden max-w-7xl px-4 sm:px-6 lg:block lg:px-8">
+            <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
                 <NavLink />
             </div>
+
 
             {/* Market Price Marquee */}
             <div>
