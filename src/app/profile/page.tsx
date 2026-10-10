@@ -21,14 +21,14 @@ const ProfilePage = () => {
     const email = user?.email || "";
     const initial = name.trim().charAt(0).toUpperCase() || "U";
 
-    // Redirect unauthenticated users to sign in
+    // Redirect to homepage if user is not logged in
     useEffect(() => {
         if (!isPending && !session) {
-            router.replace("/signin");
+            router.replace("/");
         }
     }, [isPending, session, router]);
 
-    // Update name in Better Auth / database
+    // Update name in Better Auth and database
     const handleUpdateName = async (
         e: React.FormEvent<HTMLFormElement>
     ) => {
@@ -63,7 +63,6 @@ const ProfilePage = () => {
             setIsEditing(false);
             toast.success("নাম সফলভাবে আপডেট হয়েছে!");
 
-            // Refresh server components, including Navbar
             router.refresh();
         } catch {
             toast.error("নাম আপডেট করা যায়নি। আবার চেষ্টা করুন।");
@@ -72,8 +71,10 @@ const ProfilePage = () => {
         }
     };
 
-    // Sign out and return to homepage
+    // Sign out and redirect to products homepage
     const handleSignOut = async () => {
+        if (isSigningOut) return;
+
         try {
             setIsSigningOut(true);
 
@@ -81,16 +82,17 @@ const ProfilePage = () => {
 
             if (result.error) {
                 toast.error("সাইন আউট করা যায়নি। আবার চেষ্টা করুন।");
+                setIsSigningOut(false);
                 return;
             }
 
             toast.success("সফলভাবে সাইন আউট হয়েছে!");
 
+            // Navigate to http://localhost:3000
             router.replace("/");
             router.refresh();
         } catch {
             toast.error("সাইন আউট করা যায়নি। আবার চেষ্টা করুন।");
-        } finally {
             setIsSigningOut(false);
         }
     };
@@ -143,7 +145,9 @@ const ProfilePage = () => {
                             <span aria-hidden="true">↪</span>
 
                             <span className="hidden sm:inline">
-                                {isSigningOut ? "সাইন আউট হচ্ছে..." : "সাইন আউট"}
+                                {isSigningOut
+                                    ? "সাইন আউট হচ্ছে..."
+                                    : "সাইন আউট"}
                             </span>
 
                             <span className="sm:hidden">বের হন</span>
