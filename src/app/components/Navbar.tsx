@@ -4,6 +4,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+
 import NavLink from "./NavLink";
 import Marquee from "./Marquee";
 
@@ -18,66 +19,60 @@ const CurrentDate = async () => {
     return <>{date}</>;
 };
 
-// Dynamic part: reads the session cookie, so it lives in its own component
 const AuthSection = async () => {
+    await connection(); // <- added: marks this part dynamic before the session code reads the time
+
     const session = await auth.api.getSession({
         headers: await headers(),
     });
 
     const user = session?.user;
 
-    const userName = user?.name?.trim() || "User";
-    const userInitial = userName.charAt(0).toUpperCase();
-
-    if (user) {
+    if (!user) {
         return (
-            <Link
-                href="/profile"
-                aria-label={`${userName} - প্রোফাইল`}
-                className="flex items-center gap-2 rounded-xl p-1.5 transition-colors hover:bg-green-50 sm:gap-3 sm:px-3 sm:py-2"
-            >
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#008a45] text-sm font-bold text-white shadow-sm sm:h-10 sm:w-10 sm:text-base">
-                    {userInitial}
-                </div>
+            <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+                <Link
+                    href="/signin"
+                    className="px-2 py-2 text-xs font-semibold text-gray-800 transition-colors hover:text-[#008a45] sm:px-3 sm:text-sm"
+                >
+                    সাইন ইন
+                </Link>
 
-                <span className="max-w-28 truncate text-xs font-semibold text-gray-800 sm:max-w-44 sm:text-sm">
-                    {userName}
-                </span>
-            </Link>
+                <Link
+                    href="/signup"
+                    className="rounded-xl bg-[#008a45] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-green-900/10 transition-all hover:bg-[#007339] sm:px-6 sm:py-2.5 sm:text-sm"
+                >
+                    সাইন আপ
+                </Link>
+            </div>
         );
     }
 
-    return (
-        <>
-            <Link
-                href="/signin"
-                className="px-2 py-2 text-xs font-semibold text-gray-800 transition-colors hover:text-black sm:px-3 sm:text-sm"
-            >
-                সাইন ইন
-            </Link>
+    const userName = user.name?.trim() || "User";
+    const initial = userName.charAt(0).toUpperCase();
 
-            <Link
-                href="/signup"
-                className="rounded-xl bg-[#008a45] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-green-900/10 transition-all hover:bg-[#007339] sm:px-6 sm:py-2.5 sm:text-sm"
-            >
-                সাইন আপ
-            </Link>
-        </>
+    return (
+        <Link
+            href="/profile"
+            aria-label={`${userName} - প্রোফাইল`}
+            title="প্রোফাইল দেখুন"
+            className="flex min-w-0 items-center gap-2 rounded-xl p-1.5 transition-colors hover:bg-green-50 sm:gap-3 sm:px-3 sm:py-2"
+        >
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#008a45] text-sm font-bold text-white shadow-sm sm:h-10 sm:w-10 sm:text-base">
+                {initial}
+            </span>
+
+            <span className="max-w-28 truncate text-xs font-semibold text-gray-800 sm:max-w-44 sm:text-sm">
+                {userName}
+            </span>
+        </Link>
     );
 };
 
-// Shown while the session loads
-const AuthFallback = () => (
-    <div className="flex items-center gap-2 sm:gap-4">
-        <span className="h-4 w-14 animate-pulse rounded bg-gray-200" />
-        <span className="h-9 w-20 animate-pulse rounded-xl bg-gray-200 sm:h-10 sm:w-24" />
-    </div>
-);
-
-// No longer async: it doesn't read the request itself
 const Navbar = () => {
     return (
         <header className="relative z-40 w-full bg-[#f8faf8]">
+            {/* Top Navbar */}
             <div className="border-b border-gray-100">
                 <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
                     {/* Logo and Website Name */}
@@ -113,19 +108,23 @@ const Navbar = () => {
                         </div>
                     </Link>
 
-                    {/* Right side: Auth / User Profile */}
-                    <div className="flex shrink-0 items-center gap-2 sm:gap-4">
-                        <Suspense fallback={<AuthFallback />}>
-                            <AuthSection />
-                        </Suspense>
-                    </div>
+                    {/* Authentication Section */}
+                    <Suspense
+                        fallback={
+                            <div className="h-10 w-28 shrink-0 animate-pulse rounded-xl bg-gray-100 sm:w-36" />
+                        }
+                    >
+                        <AuthSection />
+                    </Suspense>
                 </div>
             </div>
 
+            {/* Category Navigation */}
             <div className="mx-auto hidden max-w-7xl px-4 sm:px-6 lg:block lg:px-8">
                 <NavLink />
             </div>
 
+            {/* Market Price Marquee */}
             <div>
                 <Marquee />
             </div>
