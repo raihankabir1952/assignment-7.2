@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth";
 
 import NavLink from "./NavLink";
 import Marquee from "./Marquee";
+import UserMenu from "./UserMenu";
 
 const CurrentDate = async () => {
     await connection();
@@ -20,7 +21,7 @@ const CurrentDate = async () => {
 };
 
 const AuthSection = async () => {
-    await connection(); // <- added: marks this part dynamic before the session code reads the time
+    await connection(); // সেশন পড়ার আগে অংশটাকে dynamic চিহ্নিত করে
 
     const session = await auth.api.getSession({
         headers: await headers(),
@@ -49,24 +50,8 @@ const AuthSection = async () => {
     }
 
     const userName = user.name?.trim() || "User";
-    const initial = userName.charAt(0).toUpperCase();
 
-    return (
-        <Link
-            href="/profile"
-            aria-label={`${userName} - প্রোফাইল`}
-            title="প্রোফাইল দেখুন"
-            className="flex min-w-0 items-center gap-2 rounded-xl p-1.5 transition-colors hover:bg-green-50 sm:gap-3 sm:px-3 sm:py-2"
-        >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#008a45] text-sm font-bold text-white shadow-sm sm:h-10 sm:w-10 sm:text-base">
-                {initial}
-            </span>
-
-            <span className="max-w-28 truncate text-xs font-semibold text-gray-800 sm:max-w-44 sm:text-sm">
-                {userName}
-            </span>
-        </Link>
-    );
+    return <UserMenu name={userName} email={user.email} />;
 };
 
 const Navbar = () => {

@@ -10,7 +10,7 @@ export default function Home() {
       <TodayPriceUp></TodayPriceUp>
       <TodayPriceDown></TodayPriceDown>
       <AllProducts></AllProducts>
-      <Footer></Footer>
+  
       
     </div>
   );

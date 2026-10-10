@@ -136,7 +136,7 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
-                        <button
+                        {/* <button
                             type="button"
                             onClick={handleSignOut}
                             disabled={isSigningOut}
@@ -151,7 +151,7 @@ const ProfilePage = () => {
                             </span>
 
                             <span className="sm:hidden">বের হন</span>
-                        </button>
+                        </button> */}
                     </div>
 
                     {/* Personal Information */}
