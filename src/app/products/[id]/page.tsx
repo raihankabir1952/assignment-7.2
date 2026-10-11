@@ -51,7 +51,6 @@ const unitBn: Record<string, string> = {
 
 const toBn = (n: number) => n.toLocaleString("bn-BD");
 
-// পূর্ণ সংখ্যা সাধারণভাবে (৬২), অর্ধেক হলে দুই দশমিক (৬৩.৫০)
 const avgBn = (n: number) =>
     Number.isInteger(n)
         ? toBn(n)
@@ -80,11 +79,10 @@ async function getProducts(): Promise<Product[]> {
 }
 
 const ProductContent = async ({ params }: PageProps) => {
-    await connection(); // সেশন পড়ার আগে অংশটাকে dynamic চিহ্নিত করে
+    await connection(); 
 
     const { id } = await params;
 
-    // আসল সেশন যাচাই (শুধু কুকি আছে কি না নয়)
     const session = await auth.api.getSession({
         headers: await headers(),
     });
@@ -107,7 +105,6 @@ const ProductContent = async ({ params }: PageProps) => {
 
     const markets = product.markets ?? [];
 
-    // সবচেয়ে কম গড় দাম আগে
     const rows = markets
         .map((m) => ({ ...m, avg: (m.min + m.max) / 2 }))
         .sort((a, b) => a.avg - b.avg);
@@ -200,7 +197,7 @@ const ProductContent = async ({ params }: PageProps) => {
                 {markets.length > 0 && (
                     <div className="mt-5 rounded-2xl border border-gray-200 bg-white/80 p-5">
 
-                        {/* দামের সারসংক্ষেপ */}
+                        
                         <h2 className="mb-3 text-sm font-bold text-gray-900">
                             দামের সারসংক্ষেপ
                         </h2>
@@ -258,7 +255,7 @@ const ProductContent = async ({ params }: PageProps) => {
                             </div>
                         </div>
 
-                        {/* বাজারভিত্তিক দাম */}
+                        
                         <h2 className="mb-3 mt-6 text-sm font-bold text-gray-900">
                             বাজারভিত্তিক আজকের দাম
                         </h2>

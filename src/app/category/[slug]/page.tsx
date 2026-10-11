@@ -43,7 +43,7 @@ const sortOptions: { value: SortKey; label: string }[] = [
     { value: "default", label: "ডিফল্ট" },
     { value: "priceAsc", label: "দাম: কম থেকে বেশি" },
     { value: "priceDesc", label: "দাম: বেশি থেকে কম" },
-    { value: "change", label: "বেশি পরিবর্তন" },
+    // { value: "change", label: "বেশি পরিবর্তন" },
 ];
 
 const unitBn: Record<string, string> = {
