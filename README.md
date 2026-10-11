@@ -37,4 +37,5 @@ Configure the required environment variables in `.env.local` before running the 
 
 **Md Raihan Kabir**
 
-GitHub: [raihankabir1952](https://github.com/raihankabir1952/assignment-7.2)
+GitHub: [raihankabir1952](https://github.com/raihankabir1952/assignment-7.2) <br>
+Live Link : [LiveLink](https://assignment-7-ivory-two.vercel.app/)
