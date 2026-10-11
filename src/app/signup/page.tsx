@@ -96,10 +96,10 @@ const SignUpPage = () => {
         <div className="min-h-screen bg-[#f3f6f3] flex flex-col items-center justify-center p-4">
             <div className="text-center mb-6">
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                    সাইন আপ
+                    অ্যাকাউন্ট তৈরি করুন
                 </h1>
                 <p className="text-gray-500 text-sm">
-                    নতুন অ্যাকাউন্ট খুলে বিস্তারিত দাম ও বাজার তুলনা দেখুন।
+                    বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন
                 </p>
             </div>
 

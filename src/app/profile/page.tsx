@@ -175,7 +175,7 @@ const ProfilePage = () => {
                                         }}
                                         className="shrink-0 text-sm font-semibold text-[#008a45] hover:text-[#007339]"
                                     >
-                                        Edit
+                                        ✏️
                                     </button>
                                 </div>
                             ) : (
@@ -206,7 +206,7 @@ const ProfilePage = () => {
                                         >
                                             {isSaving
                                                 ? "আপডেট হচ্ছে..."
-                                                : "Update Information"}
+                                                : "আপডেট "}
                                         </button>
 
                                         <button
