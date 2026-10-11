@@ -40,8 +40,9 @@ const SignInForm = () => {
             }
 
             toast.success("সফলভাবে সাইন ইন হয়েছে!");
-            router.push(callbackUrl);
-            router.refresh();
+            // router.push(callbackUrl);
+            // router.refresh();
+            window.location.replace(callbackUrl);
         } catch {
             setError("লগইন করা যায়নি। আবার চেষ্টা করুন।");
         } finally {
