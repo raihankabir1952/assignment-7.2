@@ -10,7 +10,6 @@ const SignInForm = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    // শুধু নিজের সাইটের পাথ গ্রহণ করা হয় (অন্য সাইটে পাঠানো ঠেকাতে)
     const rawCallback = searchParams.get("callbackUrl") ?? "/";
     const callbackUrl =
         rawCallback.startsWith("/") && !rawCallback.startsWith("//")
@@ -186,7 +185,6 @@ const SignInForm = () => {
     );
 };
 
-// useSearchParams ব্যবহার করলে Suspense লাগে, নাহলে build এরর আসে
 const SignInPage = () => (
     <Suspense>
         <SignInForm />

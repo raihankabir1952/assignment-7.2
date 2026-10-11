@@ -53,7 +53,6 @@ const UserMenu = ({ name, email }: UserMenuProps) => {
             return;
         }
 
-        // সরাসরি হোম পেজে (localhost:3000); পুরো রিলোড হয় বলে নেভবারও নতুন অবস্থায় আসে
         window.location.assign("/");
     };
 

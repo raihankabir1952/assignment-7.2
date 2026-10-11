@@ -61,8 +61,7 @@ const pctBn = (n: number) =>
         maximumFractionDigits: 1,
     });
 
-
-    async function getJson<T>(url: string): Promise<T> {
+async function getJson<T>(url: string): Promise<T> {
     "use cache";
     cacheLife("hours");
 
@@ -94,6 +93,61 @@ const pctBn = (n: number) =>
 
     throw new Error(`API request failed (status ${lastStatus}): ${url}`);
 }
+
+const CategorySkeleton = () => (
+    <section
+        className="w-full bg-[#f4f8f5] py-8"
+        aria-busy="true"
+        aria-label="লোড হচ্ছে"
+    >
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+
+            {/* Header card */}
+            <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white/80 p-5">
+                <div className="h-12 w-12 animate-pulse rounded-full bg-gray-200" />
+                <div className="space-y-2">
+                    <div className="h-5 w-32 animate-pulse rounded bg-gray-200" />
+                    <div className="h-3 w-52 animate-pulse rounded bg-gray-200" />
+                </div>
+            </div>
+
+            {/* Sort bar */}
+            <div className="mt-4 flex items-center justify-end rounded-2xl border border-gray-200 bg-white/80 px-4 py-3">
+                <div className="h-8 w-40 animate-pulse rounded-lg bg-gray-200" />
+            </div>
+
+            {/* Count */}
+            <div className="mb-3 mt-4 h-3 w-48 animate-pulse rounded bg-gray-200" />
+
+            {/* Cards */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                    <div
+                        key={i}
+                        className="rounded-2xl border border-gray-200 bg-white/80 p-4"
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="h-12 w-12 shrink-0 animate-pulse rounded-xl bg-gray-200" />
+                            <div className="flex-1 space-y-2">
+                                <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200" />
+                                <div className="h-3 w-1/3 animate-pulse rounded bg-gray-200" />
+                            </div>
+                        </div>
+
+                        <div className="mt-4 space-y-2">
+                            <div className="h-3 w-20 animate-pulse rounded bg-gray-200" />
+                            <div className="flex items-center justify-between">
+                                <div className="h-6 w-24 animate-pulse rounded bg-gray-200" />
+                                <div className="h-6 w-16 animate-pulse rounded-full bg-gray-200" />
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+        </div>
+    </section>
+);
 
 const CategoryContent = async ({ params, searchParams }: PageProps) => {
     const { slug } = await params;
@@ -129,7 +183,6 @@ const CategoryContent = async ({ params, searchParams }: PageProps) => {
             </section>
         );
     }
-
 
     const category = categories.find((item) => item.slug === slug);
 
@@ -177,7 +230,6 @@ const CategoryContent = async ({ params, searchParams }: PageProps) => {
                 <div className="mt-4 flex items-center justify-end gap-2 rounded-2xl border border-gray-200 bg-white/80 px-4 py-3">
                     <span className="text-xs text-gray-600">সাজান</span>
 
-                    {/* key={sortKey} দিলে অপশন ক্লিকের পর মেনু বন্ধ হয়ে যায় */}
                     <details key={sortKey} className="relative">
                         <summary className="flex cursor-pointer list-none items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-800 [&::-webkit-details-marker]:hidden">
                             {currentLabel}
@@ -296,15 +348,7 @@ const CategoryContent = async ({ params, searchParams }: PageProps) => {
 const CategoryPage = ({ params, searchParams }: PageProps) => {
     return (
         <main>
-            <Suspense
-                fallback={
-                    <section className="w-full bg-[#f4f8f5] py-8">
-                        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-                            <div className="h-20 animate-pulse rounded-2xl bg-gray-100" />
-                        </div>
-                    </section>
-                }
-            >
+            <Suspense fallback={<CategorySkeleton />}>
                 <CategoryContent
                     params={params}
                     searchParams={searchParams}

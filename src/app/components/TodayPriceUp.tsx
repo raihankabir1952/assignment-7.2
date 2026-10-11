@@ -38,7 +38,7 @@ const TodayPriceUp = async () => {
 
     const data: Product[] = await res.json();
 
-    // সবচেয়ে বেশি দাম বেড়েছে এমন Top 6 products
+    // Top 6 products
     const priceUpProducts = data
         .filter((product) => product.change.dir === "up")
         .sort((a, b) => b.change.pct - a.change.pct)
