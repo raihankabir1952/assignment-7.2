@@ -41,7 +41,7 @@ const SignUpPage = () => {
                 name: name.trim(),
                 email: email.trim(),
                 password,
-                callbackURL: "/",
+                callbackURL: "/signin",
             });
 
             if (result.error) {
@@ -61,7 +61,7 @@ const SignUpPage = () => {
             }
 
             toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!");
-            router.push("/");
+            router.push("/signin");
             router.refresh();
         } catch {
             setError("সার্ভারের সঙ্গে সংযোগ করা যায়নি। আবার চেষ্টা করুন।");
@@ -99,7 +99,7 @@ const SignUpPage = () => {
                     অ্যাকাউন্ট তৈরি করুন
                 </h1>
                 <p className="text-gray-500 text-sm">
-                    বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন
+                    বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।
                 </p>
             </div>
 
